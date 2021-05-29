@@ -1,0 +1,32 @@
+body{
+    margin: 0;
+}
+
+#map{
+    width: 600px;
+    height: 600px;
+}
+
+input:checked + label{
+    background: {
+        color: black;
+    }
+    color: white;
+    font: {
+        weight: bolder;
+    }
+}
+
+.option-form{
+    display: inline-block;
+    padding: 10px;
+    background: {
+        color: lightgray;
+    };
+    border: {
+        radius: 5px;
+    }
+    margin: 5px;
+    transition: all 0.2s;
+    cursor: pointer;
+}

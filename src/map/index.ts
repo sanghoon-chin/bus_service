@@ -3,12 +3,9 @@ import './map'
 import { myAPIKey } from '../config/index';
 import { getData } from '../utils/getData';
 
-import endpoint from '../data/reqApiList';
+import db from '../utils/db';
 
-// 이건 어디서 불러오는 거지??
-// import {writeFile} from 'fs/promises';
-// import path from 'path';
-// const filePath = path.resolve(__dirname, 'src/data');
+import endpoint from '../data/reqApiList';
 
 const requestOrigin:string = `http://openapi.tago.go.kr/openapi/service/`;
 
@@ -43,7 +40,7 @@ const init = () => {
 };
 
 cityContainer.addEventListener('click', async (e:MouseEvent) => {
-    const tar = e.target as HTMLElement;
+    const tar = e.target as typeof cityContainer;
     console.log(tar.dataset.code);
     const q = new URLSearchParams();
     q.append('ServiceKey', myAPIKey);
@@ -61,13 +58,10 @@ cityContainer.addEventListener('click', async (e:MouseEvent) => {
     const result = await getData(requestOrigin, endpoint.get('도시코드목록조회'), queries.toString());
     const dom:DOMParser = new DOMParser();
     const data = dom.parseFromString(result, 'text/xml');
-    // 타입 추론을 해주는데 이렇게 하는 게 맞나??
     cityInfo = Array.from(data.querySelectorAll('items > item')).map(v => ({
         cityCode: v.querySelector('citycode')?.innerHTML,
         cityName: v.querySelector('cityname')?.innerHTML
-    })) as CITYINFO[]
-    // 질문. 파일로 저장하고 싶음
-    // await writeFile(filePath + 'cityInfo.json', JSON.stringify(cityInfo))
+    })) as CITYINFO[];
 
     init();
 })();

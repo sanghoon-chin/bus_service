@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack serve"
+    "start:dev": "webpack serve",
+    "start:build": "webpack"
   },
   "keywords": [],
-  "author": "",
+  "author": "sanghoon-chin",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^15.6.1",

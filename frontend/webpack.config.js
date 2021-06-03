@@ -29,7 +29,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './src/map/index.html',
             filename: '[name].html',
-            chunks: ['map']
+            chunks: ['map'],
+            inject: 'body'
         })
     ],
     resolve: {

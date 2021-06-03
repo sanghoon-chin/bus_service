@@ -4,7 +4,9 @@ const path = require('path')
 const app = express();
 
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../dist/index.html'))
+    res.sendFile('map.html', {
+        root: path.resolve(__dirname, '../frontend/dist')
+    })
 })
 
 const server = app.listen(80, () => {

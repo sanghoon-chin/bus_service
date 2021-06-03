@@ -28,8 +28,8 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/map/index.html',
-            filename: 'index.html',
-            inject: 'body'
+            filename: '[name].html',
+            chunks: ['map']
         })
     ],
     resolve: {

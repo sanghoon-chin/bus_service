@@ -1,1 +1,1 @@
-export const myAPIKey = `hafLbQyiH/cTVqUthoqnvwa/z3Vc3CD92v7SiXY3xEzvl6hKF/KJzjH6+3a+N4Bmb5etg61oECZ7W6Rrw7lWKg==`;
+export const myAPIKey= `hafLbQyiH%2FcTVqUthoqnvwa%2Fz3Vc3CD92v7SiXY3xEzvl6hKF%2FKJzjH6%2B3a%2BN4Bmb5etg61oECZ7W6Rrw7lWKg%3D%3D`;

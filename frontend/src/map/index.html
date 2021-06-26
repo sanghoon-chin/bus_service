@@ -1,23 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dcf5898f22c1e449873c957deaff458f"></script>
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dcf5898f22c1e449873c957deaff458f"></script>
 </head>
+
 <body>
-    <div id="map"></div>
-    <div>
-        <div>
-            <h4>(시/군)을 선택해주세요</h4>
-            <div id="city-container"></div>
+    <nav class="navbar" style="justify-content: space-between;">
+        <div class="d-flex">
+            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"
+                aria-controls="offcanvas" id="offcanvas-btn">
+                <span class="bi bi-list" style="font-size: 2rem;"></span>
+            </button>
         </div>
-        <div>
-            <h4>버스를 선택해주세요</h4>
-            <div id="bus-container"></div>
+        <form class="d-flex p-2" style="float: right;">
+            <div class="dropdown d-flex">
+                <button class="btn btn-success dropdown-toggle" type="button" id="bus-loc-info"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    지역을 선택해주세요
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="bus-loc-info" id="bus-loc-container"></ul>
+            </div>
+            <div class="dropdown mx-2">
+                <button class="btn btn-success dropdown-toggle" type="button" id="bus-route-info"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    버스 노선을 선택해주세요
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="bus-loc-info" id="bus-route-container">
+                    <li class="dropdown-item">지역을 먼저 선택해주세요</li>
+                </ul>
+            </div>
+            <button class="btn btn-primary" type="button" id="search-btn">경로보기</button>
+            <button class="btn btn-primary mx-2" type="button" id="station-btn" disabled>경유 정류소 보기</button>
+        </form>
+    </nav>
+
+    <aside class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasLabel">게스트님 안녕하세요</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div>
+                Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images,
+                lists, etc.
+            </div>
+            <!-- <div class="dropdown mt-3">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown">
+                    Dropdown button
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                </ul>
+            </div> -->
+        </div>
+    </aside>
+    
+    <div id="map"></div>
+
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+
+    <div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                값을 입력해주세요
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
         </div>
     </div>
 </body>
+
 </html>

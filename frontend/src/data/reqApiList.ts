@@ -14,17 +14,10 @@ requestPaths.set('정류소별도착예정정보목록조회', 'ArvlInfoInqireSe
  */
 requestPaths.set('정류소별특정노선버스도착예정정보목록조회', 'ArvlInfoInqireService/getSttnAcctoSpcifyRouteBusArvlPrearngeInfoList')
 
-/**
- * @param citycode 도시코드 ex. 25
- * @param cityname 도시명 ex. 대구광역시
- */
-// requestPaths.set('도시코드목록조회', 'ArvlInfoInqireService/getCtyCodeList');
-
-
 // 2. 버스노선정보조회서비스 => 시내버스 노선정보 조회
 /**
  * @param citycode 도시코드 ex. 25
- * @param routeNo 노선번호 ex. 5
+ * @param routeNo 노선번호 ex. 5   // optional
  */
 requestPaths.set('노선번호목록조회', 'BusRouteInfoInqireService/getRouteNoList')
 
@@ -42,12 +35,6 @@ requestPaths.set('노선별경유정류소목록조회', 'BusRouteInfoInqireServ
  */
 requestPaths.set('노선정보항목조회', 'BusRouteInfoInqireService/getRouteInfoIem')
 
-/**
- * @param citycode 도시코드 ex. 25
- * @param cityname 도시명 ex. 대구광역시
- */
-// requestPaths.set('도시코드목록조회', 'BusRouteInfoInqireService/getCtyCodeList')
-
 
 // 3. 버스정류소 정보조회 서비스
 /**
@@ -64,12 +51,6 @@ requestPaths.set('정류소번호목록조회', 'BusSttnInfoInqireService/getStt
  * @param gpsLong GPS X좌표 ex. 127.3
  */
 requestPaths.set('좌표기반근접정류소목록조회', 'BusSttnInfoInqireService/getCrdntPrxmtSttnList');
-
-/**
- * @param citycode 도시코드 ex. 25
- * @param cityname 도시명 ex. 대구광역시
- */
-// requestPaths.set('도시코드 목록 조회', 'BusSttnInfoInqireService/getCtyCodeList');
 
 
 // 4. 버스위치정보조회서비스 => 시내버스 위치정보 조회 /BusLcInfoInqireService

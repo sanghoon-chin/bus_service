@@ -1,9 +1,11 @@
 const path = require('path');
+const fs = require('fs/promises');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     entry: {
-        map: './src/map/index.ts'
+        map: './src/map/index.ts',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -20,24 +22,47 @@ module.exports = {
                 ]
             },
             {
+                test: /\.css$/i,
+                use: [
+                    "style-loader",
+                    "css-loader"
+                ],
+            },
+            {
                 test: /\.tsx?$/,
                 use: 'ts-loader'
+            },
+            {
+                test: /\.(svg|eot|woff|woff2|ttf)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        // options: {
+                        //     outputPath: 'assets/fonts',
+                        //     publicPath: '/assets/fonts'
+                        // }
+                    }
+                ]
             }
         ]
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/map/index.html',
-            filename: '[name].html',
+            filename: 'map.html',
             chunks: ['map'],
-            inject: 'body'
-        })
+        }),
+        new CopyPlugin({
+            patterns: [
+                { from: "src/assets", to: "assets" }
+            ],
+        }),
     ],
     resolve: {
         alias: {
             '@': path.resolve(__dirname, 'src/')
         },
-        extensions: ['.js', '.ts']
+        extensions: ['.js', '.ts', '.css']
     },
     mode: 'development',
     devServer: {

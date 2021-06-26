@@ -1,32 +1,64 @@
+@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+*{
+    box-sizing: border-box;
+}
+
 body{
     margin: 0;
 }
 
 #map{
-    width: 600px;
-    height: 600px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
 }
 
-input:checked + label{
+nav{
     background: {
-        color: black;
+        color: transparent;
     }
-    color: white;
-    font: {
-        weight: bolder;
+    transition: all .3s;
+
+    &:hover{
+        cursor: pointer;
+        box-shadow: 0 0 10px 0 gray;
+    }
+
+    #bus-loc-container,
+    #bus-route-container{
+        max-height: 400px;
+        overflow: auto;
+        
+        .dropdown-item{
+            cursor: pointer;
+            transition: all .2s;
+
+            &:hover{
+                font: {
+                    weight: bold;
+                }
+            }
+        }
     }
 }
 
-.option-form{
-    display: inline-block;
-    padding: 10px;
-    background: {
-        color: lightgray;
-    };
-    border: {
-        radius: 5px;
+.spinner-border{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    &.none{
+        display: none;
     }
-    margin: 5px;
-    transition: all 0.2s;
-    cursor: pointer;
+}
+
+.toast{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
 }

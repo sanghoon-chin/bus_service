@@ -1,7 +1,10 @@
-type GETDATA = (origin: string, path: string, query: string, method?: string) => Promise<string>
+import { myAPIKey } from '@/config';
+import {origin} from '../data/apiList';
 
-export const getData: GETDATA = (origin, path, query, method='GET') => {
-    const url = `${origin}${path}?${query}`;
-    const dom = new DOMParser()
-    return fetch(url, {method}).then(res => res.text());
+type FETCHDATA = (path: string, query?: string) => Promise<string>;
+
+export const fetchData: FETCHDATA = (path, query='') => {
+    query += `&serviceKey=${myAPIKey}`;
+    const endpoint = `${origin}${path}?${query}`;
+    return fetch(endpoint).then(res => res.text());
 }

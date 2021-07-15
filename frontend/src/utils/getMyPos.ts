@@ -1,8 +1,3 @@
-// interface POS {
-//     lat: number;
-//     lon: number;
-// }
-
 export const getPosition = async () => {
     const {coords} = await new Promise<any>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)

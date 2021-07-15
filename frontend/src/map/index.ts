@@ -6,29 +6,17 @@ import { areaIds } from '../data/areaIds';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import * as bootstrapInit from './common';
 import './index.scss';
-import { IKakaoMap, IKakaoLatLng, IKakao, IKakaoMarker, IKakaoMarkerOptions, IKakaoPolyline } from 'tenel-kakao-map';
+import { IKakaoMap, IKakaoLatLng, IKakaoMarker, IKakaoPolyline } from 'tenel-kakao-map';
+import type {POSITION, Station} from '../interface/type';
 
 bootstrapInit.init();
+
+// let map: InstanceType<typeof kakao.maps.Map>;    // 이런 방법도 가능. class와 instance는 엄연히 다름!!
 let map: IKakaoMap;
 
-const $: typeof document.querySelector = document.querySelector.bind(document);
-
-interface POSITION {
-    title: string;
-    latlng: IKakaoLatLng
-};
-
-type Loc = {
-    x: number;
-    y: number;
-}
-
-interface Station {
-    regionName: string;
-    stationLoc: Loc,
-    stationName: string;
-    stationId: string;
-}
+// 전역변수(window property)로 등록. jquery랑 충돌나는것도 해결해야할 듯 => 잘 안됨..
+window.$ = document.querySelector.bind(document);
+// globalThis.$ => 이거 타입 등록해도 안됨.. 어차피 브라우저에서는 윈도우랑 같은거 아닌가!?!?!?
 
 let polyLine:IKakaoPolyline;
 let markers:IKakaoMarker[] = [];
@@ -36,15 +24,15 @@ let positions:POSITION[] = [];
 
 (async () => {
     map = await initMap();
-    $('.spinner-border')?.classList.add('none');
+    window.$('.spinner-border')?.classList.add('none');
 })();
 
-const busLocContainer = $('#bus-loc-container') as HTMLUListElement;
-const busRouteContainer = $("#bus-route-container") as HTMLUListElement;
-const selectedLoc = $('#bus-loc-info') as HTMLDivElement;
-const selectedRoute = $('#bus-route-info') as HTMLDivElement;
-const searchBtn = $('#search-btn') as HTMLButtonElement;
-const stationBtn = $('#station-btn') as HTMLButtonElement;
+const busLocContainer = window.$('#bus-loc-container') as HTMLUListElement;
+const busRouteContainer = window.$("#bus-route-container") as HTMLUListElement;
+const selectedLoc = window.$('#bus-loc-info') as HTMLDivElement;
+const selectedRoute = window.$('#bus-route-info') as HTMLDivElement;
+const searchBtn = window.$('#search-btn') as HTMLButtonElement;
+const stationBtn = window.$('#station-btn') as HTMLButtonElement;
 
 const routeColorSet = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff'];
 
@@ -66,7 +54,10 @@ const initBusLocInfo = () => {
         selectedLoc.innerHTML = li.innerHTML;
         const id = li.dataset.id as string;
         selectedLoc.dataset.id = id;
-        selectedRoute.innerHTML = `<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>노선 선택`
+        selectedRoute.innerHTML = `
+            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+            노선 선택
+        `;
         initBusRouteInfo(id);
     })
 }
@@ -74,7 +65,7 @@ const initBusLocInfo = () => {
 const initBusRouteInfo = async (areaId: string) => {
     const queries = new URLSearchParams();
     queries.append('areaId', areaId);
-    const textData = await fetchData(url.get('운행지역별노선번호목록조회'), queries.toString());
+    const textData = await fetchData(url.get('운행지역별노선번호목록조회') as string, queries.toString());
     const dom = new DOMParser();
     const html = dom.parseFromString(textData, 'application/xml');
     const msgBody = html.querySelectorAll('msgBody > busRouteList');
@@ -150,7 +141,7 @@ searchBtn.addEventListener('click', async () => {
     }
     const queries = new URLSearchParams();
     queries.append('routeId', routeId);
-    const textData = await fetchData(url.get('노선형상정보목록조회'), queries.toString());
+    const textData = await fetchData(url.get('노선형상정보목록조회') as string, queries.toString());
     const dom = new DOMParser();
     const html = dom.parseFromString(textData, 'application/xml');
     const busRouteLineList = html.querySelectorAll('msgBody > busRouteLineList');
@@ -176,6 +167,7 @@ searchBtn.addEventListener('click', async () => {
     
     map.setBounds(bounds);
 
+    // 기존의 경로 및 마커 초기화
     if(polyLine){
         removePolyLine(polyLine);
     }
@@ -194,14 +186,50 @@ searchBtn.addEventListener('click', async () => {
         strokeOpacity: 0.7,
     });
 
+    const randomIdx = Math.floor(Math.random() * linePath.length)
+    const randomCoord = linePath[randomIdx];
+    const prev = linePath[randomIdx - 10];
+    const next = linePath[randomIdx + 10];
+    const slope =  (next.getLng() - prev.getLng()) / (next.getLat() - prev.getLat());
+    const angle = Math.atan2(slope, 1);
+
+    // 이거 어떻게 등록..??
+    // Math.prototype.radian = 
+    
+    const customOverlay = new kakao.maps.CustomOverlay({
+        map,
+        clickable: true,
+        content: returnCustomBusMarkerImg(angle),
+        position: randomCoord,
+        xAnchor: 0.5,
+        yAnchor: 1,
+        zIndex: 1000
+    });
+
+    customOverlay.setMap(map);
     polyLine.setMap(map);
 });
+
+const returnCustomBusMarkerImg = (angle:number) => {
+
+    const rad2Deg = (rad: number) => rad * Math.PI / 180;
+
+    const div = document.createElement('div');
+    div.classList.add('customOverlay');
+    div.style.width = '30px';
+    div.style.height = '30px';
+    div.style.backgroundImage = 'url(./assets/bus_icon.png)';
+    div.style.backgroundSize = 'contain';
+    div.style.transform = `rotate(${90 - rad2Deg(angle)}deg)`
+    return div;
+}
+
 
 const getBusStationInfo = async () => {
     const routeId = selectedRoute.dataset.id as string;
     const queries = new URLSearchParams();
     queries.append('routeId', routeId);
-    const textData = await fetchData(url.get('경유정류소목록조회'), queries.toString());
+    const textData = await fetchData(url.get('경유정류소목록조회') as string, queries.toString());
     const dom = new DOMParser();
     const html = dom.parseFromString(textData, 'application/xml');
     const busRouteStationList = html.querySelectorAll('msgBody > busRouteStationList');
@@ -215,8 +243,7 @@ const getBusStationInfo = async () => {
             stationName: (v.querySelector('stationName') as HTMLElement).innerHTML,
             stationId: (v.querySelector('stationId') as HTMLElement).innerHTML
         };
-    })
-    console.log(data)
+    });
     return data;
 };
 
@@ -230,14 +257,23 @@ const removeMarkers = (positions: POSITION[], markers: IKakaoMarker[]) => {
 
 const removePolyLine = (polyline:IKakaoPolyline) => {
     polyline.setMap(null);
-}
+};
 
-($('nav') as HTMLDivElement).addEventListener('mouseenter', function () {
+(window.$('nav') as HTMLDivElement).addEventListener('mouseenter', function () {
     this.classList.add('bg-light');
 });
 
-($('nav') as HTMLDivElement).addEventListener('mouseleave', function () {
+(window.$('nav') as HTMLDivElement).addEventListener('mouseleave', function () {
     this.classList.remove('bg-light');
 });
 
 initBusLocInfo();
+
+// const test = async () => {
+//     const queries = new URLSearchParams();
+//     queries.append('routeId', '233000031');
+//     const htmlText = await fetchData(url.get('버스위치정보목록조회'), queries.toString());
+//     console.log(htmlText);
+// }
+
+// test()

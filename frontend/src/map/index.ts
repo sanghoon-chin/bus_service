@@ -186,9 +186,11 @@ searchBtn.addEventListener('click', async () => {
         strokeOpacity: 0.7,
     });
 
+
+    // 실시간 버스 위치 대신 mock 데이터
     const randomIdx = Math.floor(Math.random() * linePath.length)
     const randomCoord = linePath[randomIdx];
-    const prev = linePath[randomIdx - 10];
+    const prev = linePath[randomIdx - 10];  // 앞에서 10번째 이내나 뒤에서 10번째 이내면 에러 날수도 있으니깐 이거 에러처리
     const next = linePath[randomIdx + 10];
     const slope =  (next.getLng() - prev.getLng()) / (next.getLat() - prev.getLat());
     const angle = Math.atan2(slope, 1);

@@ -1,4 +1,4 @@
-import { IKakaoLatLng } from "tenel-kakao-map";
+import type { IKakaoLatLng, IKakaoCustomOverlay } from "tenel-kakao-map";
 
 export interface POSITION {
     title: string
@@ -13,4 +13,16 @@ export interface Station {
     }
     stationName: string
     stationId: string;
+}
+
+export interface ILoc {
+    lat: number;
+    lon: number
+}
+
+export interface BUS_DATA{
+    data: ILoc | IKakaoLatLng;
+    overlay: IKakaoCustomOverlay;
+    directionX?:number;
+    directionY?:number;
 }

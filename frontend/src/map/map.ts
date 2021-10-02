@@ -38,7 +38,7 @@ export const initMap = async () => {
                 content: `
                     <div style="padding:5px; text-align: center;" class="text-primary">내 위치</div>
                 `,
-                removable: true // declare 로!! git에서 folk 해서 커스터마이징 해도 됨. 이게 tenel-kakao-map에는 없음
+                removable: true // declare 로!! git에서 fork 해서 커스터마이징 해도 됨. 이게 tenel-kakao-map에는 없음
             });
             
             kakao.maps.event.addListener(marker, 'click', function () {
